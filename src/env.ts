@@ -13,5 +13,8 @@ export const variables = defineEnvVars({
 	},
 	GITHUB_CLIENT_SECRET: {
 		description: 'GitHub OAuth client secret. See [Better Auth GitHub provider](https://www.better-auth.com/docs/authentication/github).'
+	},
+	OPENROUTER_API_KEY: {
+		description: 'OpenRouter API key. See [OpenRouter documentation](https://openrouter.ai/docs/quickstart).'
 	}
 });
