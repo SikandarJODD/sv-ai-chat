@@ -31,6 +31,10 @@
 			}
 		}
 	});
+
+	if (browser) {
+		user.initializeAuthMutations(queryClient);
+	}
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>

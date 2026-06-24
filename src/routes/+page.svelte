@@ -1,27 +1,19 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/config/user.svelte';
 </script>
 
 <div class="flex justify-center h-screen items-center">
 	{#if user.isAuthenticated}
-		<p>Welcome, {user.user?.name}!</p>
-		<form
-			method="POST"
-			use:enhance={(form) => {
-				return async ({ result, update }) => {
-					console.log('Logout result:', result);
-					if (result.type === 'success') {
-						user.user = null;
-						user.isAuthenticated = false;
-					}
-				};
-			}}
-			action="?/signOut"
-		>
-			<Button type="submit">Logout</Button>
-		</form>
+		<div class="flex flex-col items-center gap-3">
+			<p>Welcome, {user.user?.name}!</p>
+			<Button disabled={user.isSigningOut} onclick={() => user.signOut()}>
+				{user.isSigningOut ? 'Signing out...' : 'Logout'}
+			</Button>
+			{#if user.signOutError}
+				<p class="text-sm text-destructive">{user.signOutError}</p>
+			{/if}
+		</div>
 	{:else}
 		<p>You are not logged in.</p>
 		<Button href="/login">Login</Button>

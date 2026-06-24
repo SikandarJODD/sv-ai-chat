@@ -11,7 +11,6 @@
 	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import SparklesIcon from '@lucide/svelte/icons/sparkles';
 	import { Button } from '../ui/button';
-	import { enhance } from '$app/forms';
 
 	const sidebar = useSidebar();
 </script>
@@ -79,28 +78,19 @@
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<form
-					action="?/signOut"
-					method="POST"
-					use:enhance={(form) => {
-						return async ({ result, update }) => {
-							console.log('Logout result:', result);
-							if (result.type === 'success') {
-								user.user = null;
-								user.isAuthenticated = false;
-							}
-						};
-					}}
-				>
-					<DropdownMenu.Item class="cursor-pointer w-full justify-start">
-						{#snippet child({ props })}
-							<Button variant="ghost" type="submit" {...props}>
-								<LogOutIcon />
-								Log out
-							</Button>
-						{/snippet}
-					</DropdownMenu.Item>
-				</form>
+				<DropdownMenu.Item class="cursor-pointer w-full justify-start">
+					{#snippet child({ props })}
+						<Button
+							variant="ghost"
+							disabled={user.isSigningOut}
+							onclick={() => user.signOut()}
+							{...props}
+						>
+							<LogOutIcon />
+							{user.isSigningOut ? 'Signing out...' : 'Log out'}
+						</Button>
+					{/snippet}
+				</DropdownMenu.Item>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</Sidebar.MenuItem>
