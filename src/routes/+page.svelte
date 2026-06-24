@@ -1,4 +1,5 @@
 <script lang="ts">
+	import LoginModal from '$lib/components/auth/login-modal.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/config/user.svelte';
 </script>
@@ -16,6 +17,7 @@
 		</div>
 	{:else}
 		<p>You are not logged in.</p>
-		<Button href="/login">Login</Button>
+		<!-- <Button href="/login">Login</Button> -->
+		<LoginModal />
 	{/if}
 </div>
