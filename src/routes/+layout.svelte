@@ -5,8 +5,12 @@
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { browser } from '$app/env';
+	import { user } from '$lib/config/user.svelte.js';
+	import { untrack } from 'svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
+	user.user = untrack(() => data.user);
+	user.isAuthenticated = untrack(() => data.isAuthenticated);
 
 	let keys = new PressedKeys();
 	keys.onKeys(['d'], () => {
