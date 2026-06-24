@@ -3,6 +3,8 @@ class UserInfo {
     user: User | null = $state(null);
     isAuthenticated: boolean = $state(false);
 
+    async signOut() {
+    }
 }
 
 export const user = new UserInfo();

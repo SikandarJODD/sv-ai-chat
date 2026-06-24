@@ -1,5 +1,7 @@
 <script lang="ts">
 	import './layout.css';
+	import AppSidebar from '$lib/components/sidebar/app-sidebar.svelte';
+	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import favicon from '$lib/assets/favicon.svg';
 	import { activeElement, PressedKeys } from 'runed';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
@@ -34,6 +36,11 @@
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <ModeWatcher defaultMode="dark" />
-<QueryClientProvider client={queryClient}>
-	{@render children()}
-</QueryClientProvider>
+<Sidebar.Provider>
+	<AppSidebar />
+	<Sidebar.Inset>
+		<QueryClientProvider client={queryClient}>
+			{@render children()}
+		</QueryClientProvider>
+	</Sidebar.Inset>
+</Sidebar.Provider>
