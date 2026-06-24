@@ -1,6 +1,5 @@
 import { deserialize } from '$app/forms';
-import { goto, invalidateAll } from '$app/navigation';
-import { createMutation, type CreateMutationResult, type QueryClient } from '@tanstack/svelte-query';
+import { invalidateAll } from '$app/navigation';
 import type { User } from 'better-auth';
 
 type SignOutResult = { success: boolean };
@@ -11,80 +10,41 @@ class UserInfo {
 	isSigningOut: boolean = $state(false);
 	signOutError: string | null = $state(null);
 
-	private queryClient: QueryClient | null = null;
-	private signOutMutation: CreateMutationResult<SignOutResult, Error, void> | null = null;
-
-	initializeAuthMutations(queryClient: QueryClient) {
-		if (this.queryClient === queryClient && this.signOutMutation) {
-			return;
-		}
-
-		this.queryClient = queryClient;
-		this.signOutMutation = createMutation(
-			() => ({
-				mutationKey: ['auth', 'signOut'],
-				mutationFn: async () => {
-					const response = await fetch('/?/signOut', {
-						method: 'POST',
-						headers: {
-							'x-sveltekit-action': 'true'
-						}
-					});
-
-					const payload = await response.text();
-
-					try {
-						const result = deserialize<SignOutResult, { message?: string }>(payload);
-
-						if (result.type === 'redirect') {
-							await goto(result.location);
-							return { success: true };
-						}
-
-						if (result.type === 'success') {
-							return result.data ?? { success: true };
-						}
-
-						if (result.type === 'failure') {
-							throw new Error(result.data?.message ?? 'Sign out failed');
-						}
-					} catch (error) {
-						if (error instanceof Error) {
-							throw error;
-						}
-					}
-
-					throw new Error('Sign out failed');
-				},
-				onMutate: () => {
-					this.isSigningOut = true;
-					this.signOutError = null;
-				},
-				onSuccess: async () => {
-					this.user = null;
-					this.isAuthenticated = false;
-					await invalidateAll();
-				},
-				onError: (error) => {
-					this.signOutError = error.message;
-				},
-				onSettled: () => {
-					this.isSigningOut = false;
-				}
-			}),
-			() => queryClient
-		);
-	}
-
 	async signOut() {
-		if (this.isSigningOut || !this.signOutMutation) {
+		if (this.isSigningOut) {
 			return;
 		}
+
+		this.isSigningOut = true;
+		this.signOutError = null;
 
 		try {
-			await this.signOutMutation.mutateAsync();
-		} catch {
-			// The mutation already stores the error state for the UI.
+			const response = await fetch('/?/signOut', {
+				method: 'POST',
+				headers: {
+					'x-sveltekit-action': 'true'
+				},
+				body: new FormData()
+			});
+
+			const result = deserialize<SignOutResult, { message?: string }>(await response.text());
+
+			if (result.type === 'success') {
+				this.user = null;
+				this.isAuthenticated = false;
+				await invalidateAll();
+				return;
+			}
+
+			if (result.type === 'failure') {
+				throw new Error(result.data?.message ?? 'Sign out failed');
+			}
+
+			throw new Error('Sign out failed');
+		} catch (error) {
+			this.signOutError = error instanceof Error ? error.message : 'Sign out failed';
+		} finally {
+			this.isSigningOut = false;
 		}
 	}
 }

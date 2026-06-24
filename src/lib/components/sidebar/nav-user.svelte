@@ -78,13 +78,16 @@
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item class="cursor-pointer w-full justify-start">
+				<DropdownMenu.Item closeOnSelect={false} class="cursor-pointer w-full justify-start">
 					{#snippet child({ props })}
 						<Button
+							{...props}
 							variant="ghost"
 							disabled={user.isSigningOut}
-							onclick={() => user.signOut()}
-							{...props}
+							onclick={() => {
+								console.log('signing out...');
+								user.signOut();
+							}}
 						>
 							<LogOutIcon />
 							{user.isSigningOut ? 'Signing out...' : 'Log out'}
