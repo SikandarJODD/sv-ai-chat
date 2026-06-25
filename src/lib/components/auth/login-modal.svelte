@@ -17,17 +17,21 @@
 		size?: ButtonSize;
 		variant?: ButtonVariant;
 		class?: string;
+		open?: boolean;
+		text?: string;
 	};
 	let {
 		size = 'default',
 		variant = 'default',
-		class: className = 'rounded-full'
+		class: className = 'rounded-full',
+		text = 'Log in',
+		open = $bindable(false)
 	}: Props = $props();
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open>
 	<Dialog.Trigger type="button" class={cn(buttonVariants({ size, variant }), className)}>
-		Log in
+		{text}
 	</Dialog.Trigger>
 	<Dialog.Content class="max-w-xs sm:max-w-sm">
 		<Dialog.Header class="mt-4 text-center">
