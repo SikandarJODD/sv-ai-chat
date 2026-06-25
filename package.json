@@ -48,6 +48,7 @@
 		"vite": "^8.0.16"
 	},
 	"dependencies": {
+		"@fontsource-variable/geist-mono": "^5.2.8",
 		"@tanstack/ai": "^0.32.0",
 		"@tanstack/ai-openrouter": "^0.14.0",
 		"@tanstack/ai-svelte": "^0.13.9",

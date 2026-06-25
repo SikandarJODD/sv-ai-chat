@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import LoginIcon from '@lucide/svelte/icons/log-in';
 	import {
 		Button,
 		buttonVariants,
@@ -30,8 +31,12 @@
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Trigger type="button" class={cn(buttonVariants({ size, variant }), className)}>
-		{text}
+	<Dialog.Trigger type="button" class={cn(buttonVariants({ size, variant }), className, 'cursor-pointer truncate')}>
+		{#if size === 'icon' || size === 'icon-sm' || size === 'icon-lg'}
+			<LoginIcon />
+		{:else}
+			<span>{text}</span>
+		{/if}
 	</Dialog.Trigger>
 	<Dialog.Content class="max-w-xs sm:max-w-sm">
 		<Dialog.Header class="mt-4 text-center">

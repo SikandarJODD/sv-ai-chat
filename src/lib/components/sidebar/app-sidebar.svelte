@@ -61,9 +61,25 @@
 			// }
 		]
 	};
+	const sidebar = Sidebar.useSidebar();
 </script>
 
-<Sidebar.Root bind:ref {collapsible} {...restProps}>
+<Sidebar.Root
+	bind:ref
+	{collapsible}
+	{...restProps}
+	onmouseenter={() => {
+		sidebar.hovered = true;
+	}}
+	onmouseleave={() => {
+		sidebar.hovered = false;
+	}}
+	onmousemove={() => {
+		if (!sidebar.open) {
+			sidebar.hovered = true;
+		}
+	}}
+>
 	<Sidebar.Header>
 		<AppHeader />
 	</Sidebar.Header>
