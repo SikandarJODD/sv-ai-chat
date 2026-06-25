@@ -16,5 +16,11 @@ export const variables = defineEnvVars({
 	},
 	OPENROUTER_API_KEY: {
 		description: 'OpenRouter API key. See [OpenRouter documentation](https://openrouter.ai/docs/quickstart).'
+	},
+	GOOGLE_CLIENT_ID: {
+		description: 'Google OAuth client ID. See [Better Auth Google provider](https://www.better-auth.com/docs/authentication/google).'
+	},
+	GOOGLE_CLIENT_SECRET: {
+		description: 'Google OAuth client secret. See [Better Auth Google provider](https://www.better-auth.com/docs/authentication/google).'
 	}
 });

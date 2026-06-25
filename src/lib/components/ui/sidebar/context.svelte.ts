@@ -27,6 +27,7 @@ class SidebarState {
 	setOpen: SidebarStateProps["setOpen"];
 	#isMobile: IsMobile;
 	state = $derived.by(() => (this.open ? "expanded" : "collapsed"));
+	hovered = $state(false);
 
 	constructor(props: SidebarStateProps) {
 		this.setOpen = props.setOpen;

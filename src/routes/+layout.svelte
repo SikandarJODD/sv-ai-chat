@@ -3,8 +3,9 @@
 	import AppSidebar from '$lib/components/sidebar/app-sidebar.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import favicon from '$lib/assets/favicon.svg';
+	import lightFavicon from '$lib/assets/light-favicon.svg';
 	import { activeElement, PressedKeys } from 'runed';
-	import { ModeWatcher, toggleMode } from 'mode-watcher';
+	import { mode, ModeWatcher, toggleMode } from 'mode-watcher';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { browser } from '$app/env';
 	import { user } from '$lib/config/user.svelte.js';
@@ -33,7 +34,13 @@
 	});
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	{#if mode.current === 'light'}
+		<link rel="icon" href={lightFavicon} />
+	{:else}
+		<link rel="icon" href={favicon} />
+	{/if}
+</svelte:head>
 
 <ModeWatcher defaultMode="dark" />
 <Sidebar.Provider>
